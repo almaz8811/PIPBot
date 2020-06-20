@@ -5,7 +5,7 @@ from telegram.ext import Filters
 from settings import TG_TOKEN, TG_API_URL
 
 def sms(bot, update):
-    print('Кто-то отправил команду /start, что мне делать?')
+    print('Кто-то отправил команду /start, что мне делать???')
     bot.message.reply_text('Здравствуйте, {}! \nПоговорите со мной.'.format(bot.message.chat.first_name))
 
 def parrot(bot, update):
