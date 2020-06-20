@@ -8,8 +8,7 @@ import requests
 # Внутри функции будет описанна логика при ее вызове
 def sms(bot, update):
     print('Кто-то отправил команду /start, что мне делать???') # Вывод сообщения в консоль
-    my_keyboard = ReplyKeyboardMarkup([['Анекдот'], ['Начать']], resize_keyboard = True) # Добавляем кнопку
-    bot.message.reply_text('Здравствуйте, {}! \nПоговорите со мной.'.format(bot.message.chat.first_name), reply_markup = my_keyboard)
+    bot.message.reply_text('Здравствуйте, {}! \nПоговорите со мной.'.format(bot.message.chat.first_name), reply_markup = get_keyboard())
 
 def get_anecdote(bot, update):
     receive = requests.get('http://anekdotme.ru/random') # Отправляем запрос к странице
@@ -23,6 +22,11 @@ def get_anecdote(bot, update):
 def parrot(bot, update):
     print(bot.message.text) # Печатаем сообщение на экране
     bot.message.reply_text(bot.message.text) # Отправляем обратно сообщение, которое пользователь написал
+
+# Функция создает клавиатуру и ее разметку
+def get_keyboard():
+    my_keyboard = ReplyKeyboardMarkup([['Анекдот'], ['Начать']], resize_keyboard = True) # Добавляем кнопку
+    return get_keyboard
 
 # Создаем функцию main(), которая соединяется с сервисом Telegram
 def main():
