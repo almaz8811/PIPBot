@@ -1,5 +1,7 @@
 from utility import get_keyboard
 from bs4 import BeautifulSoup
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode
+from telegram.ext import ConversationHandler
 import requests
 
 # Функция sms будет вызванна при отправке пользователем /start
@@ -30,3 +32,58 @@ def get_contact(bot, update):
 def get_location(bot, update):
     print(bot.message.location)
     bot.message.reply_text('{}, мы получили вае местоположение'.format(bot.meccage.chat.first_name))
+
+def anketa_start(bot, update):
+    bot.message.reply_text('Как вас зовут?', reply_markup=ReplyKeyboardRemove())  # вопрос и убираем основную клавиатуру
+    return 'user_name'  # ключ для определения следующего шага
+
+
+def anketa_get_name(bot, update):
+    update.user_data['name'] = bot.message.text  # временно сохраняем ответ
+    bot.message.reply_text('Сколько вам лет?')  # задаем вопрос
+    return 'user_age'  # ключ для определения следующего шага
+
+
+def anketa_get_age(bot, update):
+    update.user_data['age'] = bot.message.text  # временно сохраняем ответ
+    reply_keyboard = [['1', '2', '3', '4', '5']]  # создаем клавиатуру
+    bot.message.reply_text(
+        'Оцените статью от 1 до 5',
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, resize_keyboard = True, one_time_keyboard = True))  # при нажатии клавиатура исчезает
+    return 'evaluation'  # ключ для определения следующего шага
+
+
+def anketa_get_evaluation(bot, update):
+    update.user_data['evaluation'] = bot.message.text  # временно сохраняем ответ
+    reply_keyboard = [['Пропустить']]  # создаем клавиатуру
+    bot.message.reply_text('Напишите отзыв или нажмите кнопку пропустить этот шаг.',
+                                reply_markup = ReplyKeyboardMarkup(
+                                reply_keyboard, resize_keyboard = True, one_time_keyboard = True))  # клава исчезает
+    return 'comment'  # ключ для определения следующего шага
+
+
+def anketa_comment(bot, update):
+    update.user_data['comment'] = bot.message.text  # временно сохраняем ответ
+    text = '''Результат опроса:
+    <b>Имя:</b> {name}
+    <b>Возраст:</b> {age}
+    <b>Оценка:</b> {evaluation}
+    <b>Комментарий:</b> {comment}
+    '''.format(**update.user_data)
+    bot.message.reply_text(text, parse_mode = ParseMode.HTML)  # текстовое сообщение с форматированием HTML
+    bot.message.reply_text('Спасибо вам за комментарий!', reply_markup = get_keyboard())  # сообщение и возвр. осн. клаву
+    return ConversationHandler.END  # выходим из диалога
+
+
+def anketa_exit_comment(bot, update):
+    text = '''Результат опроса:
+    <b>Имя:</b> {name}
+    <b>Возраст:</b> {age}
+    <b>Оценка:</b> {evaluation}'''.format(**update.user_data)
+    bot.message.reply_text(text, parse_mode = ParseMode.HTML)  # текстовое сообщение с форматированием HTML
+    bot.message.reply_text('Спасибо!', reply_markup = get_keyboard())  # отправляем сообщение и возвращаем осн. клаву
+    return ConversationHandler.END  # выходим из диалога
+
+
+def dontknow(bot, update):
+    bot.message.reply_text('Я вас не понимаю, выберите оценку на клавиатуре!')
