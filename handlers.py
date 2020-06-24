@@ -1,16 +1,19 @@
-from utility import get_keyboard
+from utility import get_keyboard, SMILE
 from bs4 import BeautifulSoup
 from glob import glob # Получить список названий картинок
 from random import choice # Получить случайный элемент из списка
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode
 from telegram.ext import ConversationHandler
 import requests
+from emoji import emojize
+
 
 # Функция sms будет вызванна при отправке пользователем /start
 # Внутри функции будет описанна логика при ее вызове
 def sms(bot, update):
+    smile = emojize(choice(SMILE), use_aliases = True)
     print('Кто-то отправил команду /start, что мне делать???') # Вывод сообщения в консоль
-    bot.message.reply_text('Здравствуйте, {}! \nПоговорите со мной.'.format(bot.message.chat.first_name), reply_markup = get_keyboard())
+    bot.message.reply_text('Здравствуйте, {}! \nПоговорите со мной {}'.format(bot.message.chat.first_name, smile), reply_markup = get_keyboard())
 
 # Функция отправляет случайную картинку
 def send_meme(bot, update):
