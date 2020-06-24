@@ -1,5 +1,7 @@
 from utility import get_keyboard
 from bs4 import BeautifulSoup
+from glob import glob # Получить список названий картинок
+from random import choice # Получить случайный элемент из списка
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode
 from telegram.ext import ConversationHandler
 import requests
@@ -9,6 +11,12 @@ import requests
 def sms(bot, update):
     print('Кто-то отправил команду /start, что мне делать???') # Вывод сообщения в консоль
     bot.message.reply_text('Здравствуйте, {}! \nПоговорите со мной.'.format(bot.message.chat.first_name), reply_markup = get_keyboard())
+
+# Функция отправляет случайную картинку
+def send_meme(bot, update):
+    lists = glob('images/*') # Создаем список из названий картинок
+    picture = choice(lists) # Берем из списка одну картинку
+    update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb')) # Отправляем картинку
 
 def get_anecdote(bot, update):
     receive = requests.get('http://anekdotme.ru/random') # Отправляем запрос к странице
