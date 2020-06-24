@@ -26,15 +26,15 @@ def parrot(bot, update):
 # Функция печатает и отвечает на полученный контакт
 def get_contact(bot, update):
     print(bot.message.contact)
-    bot.message.reply_text('{}, мы получили ваш номер телефона'.format(bot.meccage.chat.first_name))
+    bot.message.reply_text('{}, мы получили ваш номер телефона'.format(bot.message.chat.first_name))
 
 # Функция печатает и отвечает на полученные геоданные
 def get_location(bot, update):
     print(bot.message.location)
-    bot.message.reply_text('{}, мы получили вае местоположение'.format(bot.meccage.chat.first_name))
+    bot.message.reply_text('{}, мы получили вае местоположение'.format(bot.message.chat.first_name))
 
 def anketa_start(bot, update):
-    bot.message.reply_text('Как вас зовут?', reply_markup=ReplyKeyboardRemove())  # вопрос и убираем основную клавиатуру
+    bot.message.reply_text('Как вас зовут?', reply_markup = ReplyKeyboardRemove())  # вопрос и убираем основную клавиатуру
     return 'user_name'  # ключ для определения следующего шага
 
 
