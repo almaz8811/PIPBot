@@ -1,5 +1,3 @@
-settings.py
 __pycache__/
 .vscode/
 *.log
-mongoconnect.py
