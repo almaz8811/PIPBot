@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 # from settings import MONGO_DB, MONGODB_LINK
 
-mdb = MongoClient(MONGODB_LINK)[MONGO_DB] # Переменная для работы с базой данных
+mdb = MongoClient(os.environ.get('MONGODB_LINK'))[os.environ.get('MONGO_DB')] # Переменная для работы с базой данных
 
 def search_or_save_user(mdb, effective_user, message):
     user = mdb.users.find_one({'user_id': effective_user.id}) # Поиск в коллекции users по user.id
