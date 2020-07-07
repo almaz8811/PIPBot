@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from settings import MONGO_DB, MONGODB_LINK
+# from settings import MONGO_DB, MONGODB_LINK
 
 mdb = MongoClient(MONGODB_LINK)[MONGO_DB] # Переменная для работы с базой данных
 

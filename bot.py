@@ -1,7 +1,8 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, Filters
-from settings import TG_TOKEN, TG_API_URL
+# from settings import TG_TOKEN, TG_API_URL
 from handlers import *
 import logging
+import os
 
 logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(message)s',
                     level = logging.INFO,
@@ -9,7 +10,7 @@ logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(message)s',
 
 # Создаем функцию main(), которая соединяется с сервисом Telegram
 def main():
-    my_bot = Updater(TG_TOKEN, TG_API_URL, use_context = True)
+    my_bot = Updater(os.environ.get('TG_TOKEN'), os.environ.get('TG_API_URL'), use_context = True)
     logging.info('Start Bot')
     my_bot.dispatcher.add_handler(CommandHandler('start', sms))
     my_bot.dispatcher.add_handler(MessageHandler(Filters.regex('Картинки'), send_meme))
