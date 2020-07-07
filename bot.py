@@ -7,7 +7,7 @@ logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(message)s',
                     level = logging.INFO,
                     filename = 'bot.log')
 
-# Создаем функцию main(), которая соединяется с сервисом Telegram.
+# Создаем функцию main(), которая соединяется с сервисом Telegram
 def main():
     my_bot = Updater(TG_TOKEN, TG_API_URL, use_context = True)
     logging.info('Start Bot')
