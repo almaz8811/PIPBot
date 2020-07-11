@@ -6,7 +6,7 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode
 from telegram.ext import ConversationHandler
 import requests
 from emoji import emojize
-from mongodb import search_or_save_user, mdb
+from mongodb import search_or_save_user, mdb, save_user_anketa
 
 
 # Функция sms будет вызванна при отправке пользователем /start
@@ -20,9 +20,13 @@ def sms(bot, update):
 
 # Функция отправляет случайную картинку
 def send_meme(bot, update):
+    print('meme')
     lists = glob('images/*') # Создаем список из названий картинок
+    print('send')
     picture = choice(lists) # Берем из списка одну картинку
+    print('is')
     update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb')) # Отправляем картинку
+    print('complite')
 
 def get_anecdote(bot, update):
     receive = requests.get('http://anekdotme.ru/random') # Отправляем запрос к странице
@@ -78,6 +82,9 @@ def anketa_get_evaluation(bot, update):
 
 def anketa_comment(bot, update):
     update.user_data['comment'] = bot.message.text  # временно сохраняем ответ
+    user = search_or_save_user(mdb, bot.effective_user, bot.message) # Получаем данные из базы данных
+    anketa = save_user_anketa(ndb, user, update.user_data) # Передаем и получаем результаты анкеты
+    print(anketa)
     text = '''Результат опроса:
     <b>Имя:</b> {name}
     <b>Возраст:</b> {age}
