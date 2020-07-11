@@ -20,13 +20,9 @@ def sms(bot, update):
 
 # Функция отправляет случайную картинку
 def send_meme(bot, update):
-    print('meme')
     lists = glob('images/*') # Создаем список из названий картинок
-    print('send')
     picture = choice(lists) # Берем из списка одну картинку
-    print('is')
     update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb')) # Отправляем картинку
-    print('complite')
 
 def get_anecdote(bot, update):
     receive = requests.get('http://anekdotme.ru/random') # Отправляем запрос к странице
