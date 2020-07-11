@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import os
 # from settings import MONGO_DB, MONGODB_LINK
 
 mdb = MongoClient(os.environ.get('MONGODB_LINK'))[os.environ.get('MONGO_DB')] # Переменная для работы с базой данных
