@@ -93,6 +93,9 @@ def anketa_comment(bot, update):
 
 
 def anketa_exit_comment(bot, update):
+    update.user_data['comment'] = None
+    user = search_or_save_user(mdb, bot.effective_user, bot.message)
+    save_user_anketa(mdb, user, update.user_data)
     text = '''Результат опроса:
     <b>Имя:</b> {name}
     <b>Возраст:</b> {age}
