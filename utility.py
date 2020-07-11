@@ -1,7 +1,7 @@
 from telegram import ReplyKeyboardMarkup, KeyboardButton # Импорт клавиатуры
 
 SMILE = ['😊', '😀', '😇', '🤠', '😎', '🤓', '👶', '🧑‍🚀', '👮', '🦸', '🧟']
-CALLBACK_BUTTON_PICTURE = 'Картинка 🏞'
+CALLBACK_BUTTON_PICTURE = 'Картинки 🏞'
 CALLBACK_BUTTON_PEN = 'Заполнить анкету 🖌'
 CALLBACK_BUTTON_START = 'Начать 🎰'
 CALLBACK_BUTTON_JOKE = 'Анекдот 🎭'
