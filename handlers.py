@@ -79,7 +79,7 @@ def anketa_get_evaluation(bot, update):
 def anketa_comment(bot, update):
     update.user_data['comment'] = bot.message.text  # временно сохраняем ответ
     user = search_or_save_user(mdb, bot.effective_user, bot.message) # Получаем данные из базы данных
-    anketa = save_user_anketa(ndb, user, update.user_data) # Передаем и получаем результаты анкеты
+    anketa = save_user_anketa(mdb, user, update.user_data) # Передаем и получаем результаты анкеты
     print(anketa)
     text = '''Результат опроса:
     <b>Имя:</b> {name}
