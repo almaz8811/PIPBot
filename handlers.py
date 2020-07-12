@@ -6,7 +6,7 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode, Inline
 from telegram.ext import ConversationHandler
 import requests
 from emoji import emojize
-from mongodb import search_or_save_user, mdb, save_user_anketa
+from mongodb import search_or_save_user, mdb, save_user_anketa, save_picture_name, save_file_id, save_like_dislike
 
 
 # Функция sms будет вызванна при отправке пользователем /start
@@ -22,14 +22,24 @@ def sms(bot, update):
 def send_meme(bot, update):
     lists = glob('images/*') # Создаем список из названий картинок
     picture = choice(lists) # Берем из списка одну картинку
+    image = save_picture_name(mdb, picture)
     inl_keyboard = InlineKeyboardMarkup([[
-        InlineKeyboardButton('👍', callback_data = '1'),
-        InlineKeyboardButton('👎', callback_data = '-1')
+        InlineKeyboardButton(f''👍 {image['like']}'', callback_data = '1'),
+        InlineKeyboardButton(f''👎 {image['dislake']}'', callback_data = '-1')
     ]])
+    msg = update.bot.send_photo(
+        chat_id = bot.message.chat.id,
+        photo = open(picture, 'rb'),
+        reply_markup = inl_keyboard) # Отправляем картинку и inline клавиатуру
+    print(msg)
+    save_file_id(mdb, picture, msg)
     update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb'), reply_markup = inl_keyboard) # Отправляем картинку
 
 def inline_button_pressed(bot, update):
-    print(bot.callback_query)
+    # print(bot.callback_query)
+    query = bot.callback_query # Данные которые приходят после нажатия кнопки
+    data = int(query.data) # Получаем данные нажатой кнопки (+1\-1)
+    save_like_dislike(mdb, query, data) # Отправляем в базу данных
     update.bot.edit_message_caption(
         caption = 'Спасибо вам за ваш выбор!',
         chat_id = query.message.chat.id,

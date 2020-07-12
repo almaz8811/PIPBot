@@ -29,3 +29,35 @@ def save_user_anketa(mdb, user, user_data):
         }
     )
     return user
+
+# Сохраняем название картинки
+def save_picture_name(mdb, picture):
+    photo = mdb.photography.find_one({'name': picture}) # Поиск картинки по названию файла
+    if not photo: # Если такого нет, создаем словарь с данными
+        photo = {'name': picture,
+                'file_id': None,
+                'like': 0,
+                'dislike': 0}
+        mdb.photography.insert_one(photo) # Сохраняем словарь в коллекцию photography
+    return photo
+
+# Сохраняем file_id отправленной картинки
+def save_file_id(mdb, picture, msg):
+    mdb.photography.update_one(
+        {'name': picture},
+        {'$set': {'file_id': msg.photo[0].file_id}})
+
+# Счетчик like и dislike
+def save_like_dislike(mdb, query, data):
+    file_id = query.message.photo[0].file_id # Получаем file_id
+    photo = mdb.photography.find_one({'file_id': file_id}) # Поиск картинки по file_id
+    if data == 1:
+        new_like = photo['like'] + data
+        mdb.photography.update_one(
+            {'file_id': file_id},
+            {'$set': {'like': new_like}})
+    else:
+        new_dislake = photo['dislake'] - data
+        mdb.photography.update_one(
+            {'file_id': file_id},
+            {'$set': {'dislake': new_dislike}})
