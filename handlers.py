@@ -24,7 +24,7 @@ def send_meme(bot, update):
     picture = choice(lists) # Берем из списка одну картинку
     image = save_picture_name(mdb, picture)
     inl_keyboard = InlineKeyboardMarkup([[
-        InlineKeyboardButton(f''👍 {image['like']}'', callback_data = '1'),
+        InlineKeyboardButton(f''👍 {image['lake']}'', callback_data = '1'),
         InlineKeyboardButton(f''👎 {image['dislake']}'', callback_data = '-1')
     ]])
     msg = update.bot.send_photo(
