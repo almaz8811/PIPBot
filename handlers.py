@@ -2,7 +2,7 @@ from utility import get_keyboard, SMILE
 from bs4 import BeautifulSoup
 from glob import glob # Получить список названий картинок
 from random import choice # Получить случайный элемент из списка
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ConversationHandler
 import requests
 from emoji import emojize
@@ -22,7 +22,18 @@ def sms(bot, update):
 def send_meme(bot, update):
     lists = glob('images/*') # Создаем список из названий картинок
     picture = choice(lists) # Берем из списка одну картинку
-    update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb')) # Отправляем картинку
+    inl_keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton('👍', callback_data = '1'),
+        InlineKeyboardButton('👎', callback_data = '-1')
+    ]])
+    update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb'), reply_markup = inl_keyboard) # Отправляем картинку
+
+def inline_button_pressed(bot, update):
+    print(bot.callback_query)
+    update.bot.edit_message_caption(
+        caption = 'Спасибо вам за ваш выбор!',
+        chat_id = query.message.chat.id,
+        message_id = query.message.message_id)
 
 def get_anecdote(bot, update):
     receive = requests.get('http://anekdotme.ru/random') # Отправляем запрос к странице

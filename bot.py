@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, ConversationHandler, Filters, CallbackQueryHandler
 # from settings import TG_TOKEN, TG_API_URL
 from handlers import *
 import logging
@@ -18,6 +18,7 @@ def main():
     my_bot.dispatcher.add_handler(MessageHandler(Filters.regex('Анекдот'), get_anecdote))
     my_bot.dispatcher.add_handler(MessageHandler(Filters.contact, get_contact))
     my_bot.dispatcher.add_handler(MessageHandler(Filters.location, get_location))
+    my_bot.dispatcher.add_handler(CallbackQueryHandler(inline_button_pressed))
     my_bot.dispatcher.add_handler(ConversationHandler(
                                     entry_points=[MessageHandler(Filters.regex('Заполнить анкету'), anketa_start)],
                                     states={
