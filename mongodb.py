@@ -37,7 +37,8 @@ def save_picture_name(mdb, picture):
         photo = {'name': picture,
                 'file_id': None,
                 'like': 0,
-                'dislike': 0}
+                'dislike': 0,
+                'user_id': []}
         mdb.photography.insert_one(photo) # Сохраняем словарь в коллекцию photography
     return photo
 
@@ -51,13 +52,14 @@ def save_file_id(mdb, picture, msg):
 def save_like_dislike(mdb, query, data):
     file_id = query.message.photo[0].file_id # Получаем file_id
     photo = mdb.photography.find_one({'file_id': file_id}) # Поиск картинки по file_id
-    if data == 1:
-        new_like = photo['like'] + data
-        mdb.photography.update_one(
-            {'file_id': file_id},
-            {'$set': {'like': new_like}})
-    else:
-        new_dislake = photo['dislake'] - data
-        mdb.photography.update_one(
-            {'file_id': file_id},
-            {'$set': {'dislake': new_dislike}})
+    if query.message.chat.id not in photo['user_id']:
+        if data == 1:
+            new_like = photo['like'] + data
+            mdb.photography.update_one(
+                {'file_id': file_id},
+                {'$set': {'like': new_like}, '$addToSet': {'user_id': query.message.chat.id}})
+        else:
+            new_dislake = photo['dislake'] - data
+            mdb.photography.update_one(
+                {'file_id': file_id},
+                {'$set': {'dislake': new_dislake}, '$addToSet': {'user_id': query.message.chat.id}})
