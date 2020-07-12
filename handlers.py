@@ -33,7 +33,7 @@ def send_meme(bot, update):
         reply_markup = inl_keyboard) # Отправляем картинку и inline клавиатуру
     print(msg)
     save_file_id(mdb, picture, msg)
-    update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb'), reply_markup = inl_keyboard) # Отправляем картинку
+    # update.bot.send_photo(chat_id = bot.message.chat_id, photo = open(picture, 'rb'), reply_markup = inl_keyboard) # Отправляем картинку
 
 def inline_button_pressed(bot, update):
     # print(bot.callback_query)
