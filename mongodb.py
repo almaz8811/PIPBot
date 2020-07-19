@@ -50,8 +50,8 @@ def save_file_id(mdb, picture, msg):
 
 # Счетчик like и dislike
 def save_like_dislike(mdb, query, data):
-    file_id = query.message.photo[0].file_id # Получаем file_id
-    photo = mdb.photography.find_one({'file_id': file_id}) # Поиск картинки по file_id
+    file_id = query.message.photo[0].file_id  # получаем file_id
+    photo = mdb.photography.find_one({'file_id': file_id})  # поиск картинки по file_id
     if query.message.chat.id not in photo['user_id']:
         if data == 1:
             new_like = photo['like'] + data
@@ -59,7 +59,7 @@ def save_like_dislike(mdb, query, data):
                 {'file_id': file_id},
                 {'$set': {'like': new_like}, '$addToSet': {'user_id': query.message.chat.id}})
         else:
-            new_dislake = photo['dislake'] - data
+            new_dislike = photo['dislike'] - data
             mdb.photography.update_one(
                 {'file_id': file_id},
-                {'$set': {'dislake': new_dislake}, '$addToSet': {'user_id': query.message.chat.id}})
+                {'$set': {'dislike': new_dislike}, '$addToSet': {'user_id': query.message.chat.id}})
